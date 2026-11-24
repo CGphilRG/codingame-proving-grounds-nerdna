@@ -18,5 +18,5 @@ Un puzzle multijoueur RPG tactique inspiré de **Wizardry: Proving Grounds of th
 
 - **CodinGame Contribution**: https://www.codingame.com/contribute/view/15867946f675bf476dc7f164eb3db1d6ce58f6
 - **Play in CodinGame IDE**: https://www.codingame.com/ide/demo/1605773233912493b234f7c05aadee6e291708f
-- **GitHub Repository**: https://github.com/codingame-team/codingame-proving-grounds-nerdna
-- **6-Puzzle Showcase Hub (GitHub Pages)**: https://codingame-team.github.io/codingame-sdk-puzzles/
+- **GitHub Repository**: https://github.com/CGphilRG/codingame-proving-grounds-nerdna
+- **6-Puzzle Showcase Hub (GitHub Pages)**: https://cgphilrg.github.io/codingame-sdk-puzzles/
