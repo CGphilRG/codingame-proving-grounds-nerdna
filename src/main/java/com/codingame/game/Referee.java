@@ -323,8 +323,8 @@ public class Referee extends AbstractReferee {
                 .setBaseWidth(54)
                 .setBaseHeight(54)
                 .setVisible(r.getGuardianHp() > 0);
-            toggleModule.displayOnToggleState(chest, "renderMode", true);
-            toggleModule.displayOnToggleState(guard, "renderMode", true);
+            Group spriteRelicGroup = graphicEntityModule.createGroup(chest, guard);
+            toggleModule.displayOnToggleState(spriteRelicGroup, "renderMode", true);
 
             Polygon debugDiamond = graphicEntityModule.createPolygon()
                 .addPoint(0, -24)
@@ -336,7 +336,7 @@ public class Referee extends AbstractReferee {
                 .setLineColor(0xffffff);
             toggleModule.displayOnToggleState(debugDiamond, "renderMode", false);
 
-            Group rg = graphicEntityModule.createGroup(chest, guard, debugDiamond)
+            Group rg = graphicEntityModule.createGroup(spriteRelicGroup, debugDiamond)
                 .setX(cellX(r.getX()))
                 .setY(cellY(r.getY()))
                 .setZIndex(5);
@@ -716,6 +716,10 @@ public class Referee extends AbstractReferee {
                         if (!r.isCollected() && r.getGuardianHp() > 0
                             && Math.abs(r.getX() - tx) + Math.abs(r.getY() - ty) <= 1) {
                             r.damageGuardian(8);
+                            if (r.getGuardianHp() == 0) {
+                                r.getGuardianSprite().setVisible(false);
+                                h.getOwner().setScore(h.getOwner().getScore() + 10);
+                            }
                         }
                     }
                 }
@@ -751,9 +755,12 @@ public class Referee extends AbstractReferee {
                 }
                 if (r.getGuardianHp() == 0 && dist == 0) {
                     r.setCollected(true);
-                    r.getChestSprite().setImage("chest_open.png");
-                    r.getRootGroup().setAlpha(0.35);
+                    r.getGuardianSprite().setVisible(false);
+                    r.getRootGroup().setVisible(false);
                     h.getOwner().setScore(h.getOwner().getScore() + r.getValue());
+                    gameManager.addToGameSummary(GameManager.formatSuccessMessage(
+                        String.format("%s's %s %d claimed Relic %d (+%d pts)!",
+                            h.getOwner().getNicknameToken(), h.getRole().name(), h.getId(), r.getId(), r.getValue())));
                     break;
                 }
             }
@@ -772,7 +779,9 @@ public class Referee extends AbstractReferee {
             p.getPartyText().setText("HEROES: " + p.getAliveHeroes().size());
         }
         for (Relic r : relics) {
-            updateRelicTooltip(r);
+            if (!r.isCollected()) {
+                updateRelicTooltip(r);
+            }
         }
         for (Hero h : allHeroes) {
             if (h.isAlive()) {
